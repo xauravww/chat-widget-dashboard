@@ -30,15 +30,10 @@ const WidgetWrapper = styled.div`
 `;
 
 // Update the server URL and path
-const SOCKET_SERVER_URL = process.env.NODE_ENV === 'development' 
-  ? 'http://localhost:3000' // Base URL for the Next.js server
-  : 'YOUR_PRODUCTION_SOCKET_URL'; // Base URL for production
-const SOCKET_PATH = "/api/socket"; // Socket.IO specific path (matches server config)
+const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000';
+const SOCKET_PATH = "/api/socket";
 
-// Use full URL for AI endpoint during development, matching the backend port
-const AI_API_ENDPOINT = process.env.NODE_ENV === 'development'
-  ? 'http://localhost:3000/api/ai' // Corrected port to 3001
-  : '/api/ai'; // Use relative path in production (assumes same origin or proxy)
+const AI_API_ENDPOINT = import.meta.env.VITE_AI_API_URL || 'http://localhost:3000/api/ai';
 
 // Function to get or create session ID
 const getSessionId = (): string => {
@@ -265,4 +260,4 @@ const WidgetContainer: React.FC = () => {
   );
 };
 
-export default WidgetContainer; 
+export default WidgetContainer;
