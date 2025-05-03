@@ -1,6 +1,6 @@
-'use client'; // For form handling and client-side functions
+'use client';
 
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import Link from 'next/link';
 
-export default function SigninPage() {
+function SigninForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/'; // Default redirect to dashboard
@@ -130,4 +130,12 @@ export default function SigninPage() {
       </div>
     </div>
   );
-} 
+}
+
+export default function SigninPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SigninForm />
+    </Suspense>
+  );
+}
