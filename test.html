@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Widget Test</title>
+    <!-- Load the widget's CSS -->
+    <link rel="stylesheet" href="./packages/widget/dist/style.css">
+    <style>
+        /* Optional: Add some basic body styling */
+        body { font-family: sans-serif; padding: 20px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+
+    <h1>My Website Content</h1>
+    <p>Some content here...</p>
+
+    <!-- The widget will automatically create this div if it doesn't exist,
+         but including it can be good practice. -->
+    <div id="chat-widget-root"></div>
+
+    <!-- Load the widget's JavaScript (adjust type if needed, but module is common) -->
+    <!-- The 'defer' attribute ensures the script runs after the HTML is parsed -->
+    <script type="module" src="./packages/widget/dist/chat-widget.iife.js" defer></script>
+
+</body>
+</html>

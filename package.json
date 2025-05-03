@@ -1,0 +1,31 @@
+{
+  "name": "chatwidget-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo for embeddable chat widget and admin dashboard",
+  "scripts": {
+    "widget:dev": "npm run dev --workspace=widget",
+    "dashboard:dev": "npm run dev --workspace=dashboard",
+    "widget:build": "npm run build --workspace=widget",
+    "dashboard:build": "npm run build --workspace=dashboard",
+    "dashboard:migrate:dev": "npm run migrate:dev --workspace=dashboard"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "keywords": [
+    "chat",
+    "widget",
+    "dashboard",
+    "react",
+    "nextjs",
+    "typescript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io-client": "^4.8.1",
+    "styled-components": "^6.1.17"
+  }
+}
