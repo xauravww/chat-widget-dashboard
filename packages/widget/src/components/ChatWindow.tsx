@@ -34,17 +34,17 @@ const Header = styled.div`
 
 // New component for status indicator
 // Use transient prop ($status) to avoid passing it to the DOM
-const StatusIndicator = styled.span<{ $status: ChatWindowProps['connectionStatus'] }>`
+const StatusIndicator = styled.span<{ $status: 'connecting' | 'connected' | 'disconnected' }>`
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   margin-left: 8px;
   background-color: ${({ $status }) => 
-    $status === 'connected' ? '#2ecc71' : // Green for connected
-    $status === 'connecting' ? '#f1c40f' : // Yellow for connecting
-    '#e74c3c'}; // Red for disconnected
-  transition: background-color 0.3s ease; // Smooth transition
+    $status === 'connected' ? '#2ecc71' : 
+    $status === 'connecting' ? '#f1c40f' : 
+    '#e74c3c'}; 
+  transition: background-color 0.3s ease;
 `;
 
 const CloseButton = styled.button`
@@ -157,8 +157,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage, onClos
     // Dependencies: run whenever messages array or isAiResponding state changes
   }, [messages, isAiResponding]); 
 
-  const handleSend = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSend = (e: React.FormEvent | React.KeyboardEvent<HTMLInputElement>) => {
+    if ('preventDefault' in e) { e.preventDefault(); }
     if (input.trim()) {
       onSendMessage(input);
       setInput('');
@@ -200,7 +200,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage, onClos
              type="text"
              placeholder={isAiResponding ? "Assistant is responding..." : "Ask a health question..."}
              value={input}
-             onChange={(e) => setInput(e.target.value)}
+             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
              onKeyPress={handleKeyPress}
              disabled={connectionStatus !== 'connected' || isAiResponding}
           />
