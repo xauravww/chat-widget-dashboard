@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { X, SendHorizonal, Loader2 } from 'lucide-react';
+import { SendHorizonal } from 'lucide-react';
 
 // Re-use Message interface (ideally move to a shared types file later)
 interface Message {
@@ -133,16 +133,6 @@ const SendButton = styled.button`
     cursor: not-allowed;
     opacity: 0.65;
   }
-`;
-
-// Styled component for the typing indicator
-const TypingIndicator = styled.div`
-  padding: 5px 12px;
-  font-style: italic;
-  color: #888;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 `;
 
 interface ChatWindowProps {
