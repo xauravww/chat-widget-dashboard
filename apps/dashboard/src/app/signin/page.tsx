@@ -19,7 +19,7 @@ import Link from 'next/link';
 export default function SigninPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/'; // Default redirect to dashboard
+  const callbackUrl = searchParams?.get('callbackUrl') || '/'; // Default redirect to dashboard
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export default function SigninPage() {
   
   // Get error message from query params (if redirected from failed sign-in)
   useEffect(() => {
-    const errorParam = searchParams.get('error');
+    const errorParam = searchParams?.get('error');
     if (errorParam) {
         // Map NextAuth error codes to user-friendly messages
         switch (errorParam) {
@@ -130,4 +130,4 @@ export default function SigninPage() {
       </div>
     </div>
   );
-} 
+}

@@ -18,6 +18,7 @@ datasource db {
 // Represents a single chat session
 model Conversation {
   id        String    @id @default(cuid()) // Unique ID for the conversation
+  sessionId String    @unique // Unique identifier from the widget session
   createdAt DateTime  @default(now()) // Timestamp when the conversation started
   updatedAt DateTime  @updatedAt // Timestamp when the conversation was last updated
   messages  Message[] // Relation to messages in this conversation
