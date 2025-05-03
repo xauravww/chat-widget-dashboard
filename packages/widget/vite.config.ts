@@ -13,6 +13,12 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
   },
+  server: {
+    cors: true, // Enable CORS for all origins
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/main.tsx'),
@@ -32,4 +38,4 @@ export default defineConfig({
     //   }
     // }
   }
-}) 
+})

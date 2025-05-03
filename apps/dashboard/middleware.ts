@@ -1,9 +1,22 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
+// Helper function to add CORS headers
+function addCorsHeaders(response: NextResponse) {
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  return response;
+}
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const secret = process.env.NEXTAUTH_SECRET;
+
+  // Handle CORS preflight requests
+  if (req.method === 'OPTIONS') {
+    return addCorsHeaders(new NextResponse(null, { status: 200 }));
+  }
 
   // Allow specific API routes without auth check
   if (
@@ -11,7 +24,8 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith('/api/socket') ||
     pathname.startsWith('/api/ai')
   ) {
-    return NextResponse.next();
+    const response = NextResponse.next();
+    return addCorsHeaders(response);
   }
   
   const token = await getToken({ req, secret });
@@ -45,4 +59,4 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico|api/socket|api/auth|signin|signup).*)',
   ],
-}; 
+};
