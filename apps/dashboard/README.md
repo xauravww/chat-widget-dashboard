@@ -35,6 +35,7 @@ These steps assume you have already cloned the monorepo and run `npm install` in
       npm run dashboard:migrate:dev
       ```
     - This will synchronize your database schema with the Prisma schema definition (`apps/dashboard/prisma/schema.prisma`).
+    - **Note:** This command also runs `prisma generate` implicitly, creating the necessary Prisma Client code based on your schema. If you modify `schema.prisma` later without running a migration, you may need to run `npx prisma generate --schema=./apps/dashboard/prisma/schema.prisma` (from the root) manually to update the client.
 
 4.  **Create Initial Admin User:**
     - Start the dashboard in development mode (see Running section below).
@@ -44,6 +45,12 @@ These steps assume you have already cloned the monorepo and run `npm install` in
 ## Running the Application
 
 Use the scripts defined in the **root** `package.json` for consistency.
+
+**Important Note on `NODE_ENV`:**
+- The `NODE_ENV` environment variable determines whether Next.js runs in development or production mode.
+- The `dashboard:dev` script runs the server in development mode.
+- The `dashboard:start` script explicitly sets `NODE_ENV=production` to run the server in production mode, utilizing the optimized build created by `dashboard:build`.
+- `prisma generate` itself is not directly affected by `NODE_ENV` in terms of the code it generates.
 
 -   **Development:**
     ```bash

@@ -4,11 +4,13 @@
   "private": true,
   "description": "Monorepo for embeddable chat widget and admin dashboard",
   "scripts": {
-    "widget:dev": "npm run dev --workspace=widget",
-    "dashboard:dev": "npm run dev --workspace=dashboard",
-    "widget:build": "npm run build --workspace=widget",
-    "dashboard:build": "npm run build --workspace=dashboard",
-    "dashboard:migrate:dev": "npm run migrate:dev --workspace=dashboard"
+    "widget:dev": "npm run dev --workspace=@repo/widget",
+    "dashboard:dev": "npm run dev --workspace=@repo/dashboard",
+    "widget:build": "npm run build --workspace=@repo/widget",
+    "dashboard:build": "npm run build --workspace=@repo/dashboard",
+    "dashboard:start": "npm run start --workspace=@repo/dashboard",
+    "dashboard:migrate:dev": "npx prisma migrate dev --schema=./apps/dashboard/prisma/schema.prisma --name init",
+    "dashboard:generate": "npx prisma generate --schema=./apps/dashboard/prisma/schema.prisma"
   },
   "workspaces": [
     "apps/*",
