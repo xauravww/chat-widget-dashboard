@@ -161,7 +161,7 @@ const config = {
       },
       {
         "fromEnvVar": null,
-        "value": "rhel-openssl-3.0.x"
+        "value": "linux-musl"
       }
     ],
     "previewFeatures": [],
@@ -188,8 +188,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n  output        = \"./src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Conversation Model\n// Represents a single chat session\nmodel Conversation {\n  id        String    @id @default(cuid()) // Unique ID for the conversation\n  sessionId String    @unique // Unique identifier from the widget session\n  createdAt DateTime  @default(now()) // Timestamp when the conversation started\n  updatedAt DateTime  @updatedAt // Timestamp when the conversation was last updated\n  messages  Message[] // Relation to messages in this conversation\n\n  // Optional: Add fields like userId if implementing user identification\n  // userId String?\n}\n\n// Message Model\n// Represents a single message within a conversation\nmodel Message {\n  id             String       @id @default(cuid()) // Unique ID for the message\n  createdAt      DateTime     @default(now()) // Timestamp when the message was sent\n  sender         SenderType // Who sent the message (User, AI, System)\n  text           String       @db.Text // Content of the message\n  conversationId String // Foreign key linking to the Conversation\n  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade) // Relation field\n}\n\n// Enum for Sender Type\nenum SenderType {\n  USER\n  AI\n  SYSTEM\n}\n\n// --- Add User Model --- \nmodel User {\n  id           String   @id @default(cuid())\n  username     String   @unique\n  passwordHash String // Store the hashed password, not the plain text\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  // Optional: Add roles or other user-related fields\n}\n",
-  "inlineSchemaHash": "276ca67ddfee375cb9f267d27695d8ffc3fa4780ec61c254f6a5519879b14f4e",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  binaryTargets = [\"native\", \"linux-musl\"] // Recommended for Vercel\n  output        = \"./src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Conversation Model\n// Represents a single chat session\nmodel Conversation {\n  id        String    @id @default(cuid()) // Unique ID for the conversation\n  sessionId String    @unique // Unique identifier from the widget session\n  createdAt DateTime  @default(now()) // Timestamp when the conversation started\n  updatedAt DateTime  @updatedAt // Timestamp when the conversation was last updated\n  messages  Message[] // Relation to messages in this conversation\n\n  // Optional: Add fields like userId if implementing user identification\n  // userId String?\n}\n\n// Message Model\n// Represents a single message within a conversation\nmodel Message {\n  id             String       @id @default(cuid()) // Unique ID for the message\n  createdAt      DateTime     @default(now()) // Timestamp when the message was sent\n  sender         SenderType // Who sent the message (User, AI, System)\n  text           String       @db.Text // Content of the message\n  conversationId String // Foreign key linking to the Conversation\n  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade) // Relation field\n}\n\n// Enum for Sender Type\nenum SenderType {\n  USER\n  AI\n  SYSTEM\n}\n\n// --- Add User Model --- \nmodel User {\n  id           String   @id @default(cuid())\n  username     String   @unique\n  passwordHash String // Store the hashed password, not the plain text\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  // Optional: Add roles or other user-related fields\n}\n",
+  "inlineSchemaHash": "c7d6199bb32a96a1cf70c0bfe7c117deb7bf7483a673732d9c4ae6c53eca2b4c",
   "copyEngine": true
 }
 
@@ -232,8 +232,8 @@ path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "prisma/src/generated/prisma/query_engine-windows.dll.node")
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
-path.join(process.cwd(), "prisma/src/generated/prisma/libquery_engine-rhel-openssl-3.0.x.so.node")
+path.join(__dirname, "libquery_engine-linux-musl.so.node");
+path.join(process.cwd(), "prisma/src/generated/prisma/libquery_engine-linux-musl.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "prisma/src/generated/prisma/schema.prisma")
