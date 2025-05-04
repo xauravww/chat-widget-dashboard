@@ -48,3 +48,4 @@ coverage/
 # Ignore SQLite database files if used locally
 *.db
 *.db-journal 
+.vercel
