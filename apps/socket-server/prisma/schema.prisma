@@ -10,7 +10,7 @@ generator client {
   // output   = "../src/generated/prisma" // Default location is node_modules/.prisma/client
   // Define binary targets needed for deployment environment + local dev
   // Add RHEL target for consistency, although this server might not run on Vercel
-  binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"] 
+  binaryTargets = ["native","rhel-openssl-3.0.x"] 
 }
 
 datasource db {
