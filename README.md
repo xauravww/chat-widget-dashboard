@@ -4,89 +4,64 @@ This repository contains the code for an embeddable chat widget and an admin das
 
 ## Project Structure
 
+The project is structured as a monorepo using npm workspaces:
+
 - `apps/dashboard`: Next.js application for the admin dashboard.
-  - Handles Socket.IO server.
-  - Connects to PostgreSQL via Prisma.
-  - Provides API for AI interaction (Gemini).
-  - Includes authentication.
+  - See [`apps/dashboard/README.md`](./apps/dashboard/README.md) for detailed setup and usage.
 - `packages/widget`: React package for the embeddable chat widget.
-  - Connects to the dashboard's Socket.IO server.
-  - Persists messages locally.
-  - Calls dashboard API for AI responses.
+  - See [`packages/widget/README.md`](./packages/widget/README.md) for detailed build and embedding instructions.
+- `packages/ui`: (Optional) Shared UI components (if you add this later).
+- `packages/config`: (Optional) Shared configurations like ESLint, TypeScript (if you add this later).
 
-## Setup
+## Quick Start
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
-2.  **Install dependencies:**
-    ```bash
-    npm install 
-    ```
-3.  **Set up PostgreSQL:**
-    - Make sure you have PostgreSQL installed and running.
-    - Create a database for this project.
-4.  **Configure Environment Variables:**
-    - Navigate to `apps/dashboard`.
-    - Create `.env` from `.env.example` or manually.
-    - Edit `.env` and provide `DATABASE_URL`, `NEXTAUTH_SECRET`, `GEMINI_API_KEY`, `NEXTAUTH_URL`.
-5.  **Run Database Migrations:**
-    ```bash
-    # Ensure you are in the root directory
-    npm run dashboard:migrate:dev 
-    ``` 
-6.  **Create Initial User:**
-    - Start the dashboard: `npm run dashboard:dev`
-    - Navigate to `http://localhost:3000/signup` in your browser.
-    - Create your admin user account using the form.
+1.  **Clone:** `git clone <repository-url>`
+2.  **Install Dependencies:** `npm install` (in the root directory)
+3.  **Setup Dashboard:** Follow the setup instructions in [`apps/dashboard/README.md`](./apps/dashboard/README.md) (Database, Environment Variables, Migrations, Initial User).
 
 ## Running the Application
+
+Run these commands from the **root** directory:
 
 1.  **Start the Dashboard (includes Socket.IO server):**
     ```bash
     npm run dashboard:dev
     ```
-    The dashboard will be available at `http://localhost:3000`.
-    Login using the credentials you created on the `/signup` page.
+    The dashboard will be available at `http://localhost:3000` (or your configured port). Login using the credentials created during setup.
 
-2.  **Build the Widget:**
+2.  **Build the Widget (Optional - for embedding):**
     ```bash
     npm run widget:build
     ```
-    This creates the embeddable script at `packages/widget/dist/chat-widget.iife.js`.
+    The embeddable script is generated at `packages/widget/dist/chat-widget.iife.js`.
 
 3.  **Test the Widget:**
     - Open the `test.html` file (in the root directory) in your browser.
-    - You should see the chat bubble. Interact with it to test sending messages and AI responses.
+    - Ensure the dashboard server is running.
+    - Interact with the chat bubble to test sending messages and AI responses.
 
 ## Embedding the Widget
 
-Include the following script tag in any HTML page where you want the widget to appear:
-
-```html
-<script src="<URL_TO_YOUR_HOSTED_WIDGET>/chat-widget.iife.js" defer></script>
-```
-
-Replace `<URL_TO_YOUR_HOSTED_WIDGET>` with the actual URL where you host the `chat-widget.iife.js` file (e.g., from a CDN or your own server).
+See [`packages/widget/README.md`](./packages/widget/README.md) for instructions on how to embed the built widget script into your website.
 
 ## Technologies Used
 
+- **Monorepo Management:** npm Workspaces
 - **Frontend (Widget):** React, TypeScript, Styled Components, Socket.IO Client, Vite
-- **Backend (Dashboard):** Next.js (App Router), TypeScript, Socket.IO, Prisma, PostgreSQL, NextAuth.js, Tailwind CSS, Shadcn UI
+- **Backend/Admin (Dashboard):** Next.js (App Router), TypeScript, Socket.IO, Prisma, PostgreSQL, NextAuth.js, Tailwind CSS, Shadcn UI
 - **AI:** Google Gemini Pro
 - **Database:** PostgreSQL
-- **Monorepo Management:** npm Workspaces
 
 ## Architecture Decisions
 
 - Monorepo structure for code sharing and unified dependency management.
-- Next.js API Routes handle Socket.IO connections and AI API calls, keeping sensitive keys off the client.
+- Custom Next.js server (`server.js`) to integrate Socket.IO alongside the Next.js application on the same port.
 - Prisma ORM simplifies database interactions.
-- Session-based conversation tracking using `localStorage` on the client and passing `sessionId` to the backend.
-- Basic credential-based authentication for the dashboard.
+- Session-based conversation tracking using `localStorage` on the client (widget) and passing `sessionId` to the backend (dashboard).
+- Credential-based authentication for the dashboard via NextAuth.js.
 
-## Challenges Faced (Optional)
+## Important Notes
 
-- (Add any significant challenges encountered and how they were overcome) 
+- **Custom Server:** Using a custom server (`server.js`) for Socket.IO integration means the dashboard application cannot be deployed on serverless platforms like Vercel that do not support long-running WebSocket connections. It requires a traditional Node.js hosting environment.
+- **Environment Variables:** Ensure all required environment variables listed in `apps/dashboard/README.md` are correctly configured in `apps/dashboard/.env`.
+
