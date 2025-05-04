@@ -147,7 +147,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\hacke\\OneDrive\\Desktop\\assignment-chatwidget\\apps\\dashboard\\src\\generated\\prisma",
+      "value": "C:\\Users\\hacke\\OneDrive\\Desktop\\chat\\chat-widget-dashboard\\apps\\dashboard\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -158,10 +158,18 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-musl"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\hacke\\OneDrive\\Desktop\\assignment-chatwidget\\apps\\dashboard\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\hacke\\OneDrive\\Desktop\\chat\\chat-widget-dashboard\\apps\\dashboard\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -184,8 +192,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Conversation Model\n// Represents a single chat session\nmodel Conversation {\n  id        String    @id @default(cuid()) // Unique ID for the conversation\n  sessionId String    @unique // Unique identifier from the widget session\n  createdAt DateTime  @default(now()) // Timestamp when the conversation started\n  updatedAt DateTime  @updatedAt // Timestamp when the conversation was last updated\n  messages  Message[] // Relation to messages in this conversation\n\n  // Optional: Add fields like userId if implementing user identification\n  // userId String?\n}\n\n// Message Model\n// Represents a single message within a conversation\nmodel Message {\n  id             String       @id @default(cuid()) // Unique ID for the message\n  createdAt      DateTime     @default(now()) // Timestamp when the message was sent\n  sender         SenderType // Who sent the message (User, AI, System)\n  text           String       @db.Text // Content of the message\n  conversationId String // Foreign key linking to the Conversation\n  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade) // Relation field\n}\n\n// Enum for Sender Type\nenum SenderType {\n  USER\n  AI\n  SYSTEM\n}\n\n// --- Add User Model --- \nmodel User {\n  id           String   @id @default(cuid())\n  username     String   @unique\n  passwordHash String // Store the hashed password, not the plain text\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  // Optional: Add roles or other user-related fields\n}\n",
-  "inlineSchemaHash": "fb1b251458219373e642a8c6db57ede03a5f2daf80db66d14b15c0bffd13dea6",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\" // <-- Custom output path,\n  binaryTargets = [\"native\", \"linux-musl\", \"rhel-openssl-3.0.x\"] // Recommended for Vercel\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Conversation Model\n// Represents a single chat session\nmodel Conversation {\n  id        String    @id @default(cuid()) // Unique ID for the conversation\n  sessionId String    @unique // Unique identifier from the widget session\n  createdAt DateTime  @default(now()) // Timestamp when the conversation started\n  updatedAt DateTime  @updatedAt // Timestamp when the conversation was last updated\n  messages  Message[] // Relation to messages in this conversation\n\n  // Optional: Add fields like userId if implementing user identification\n  // userId String?\n}\n\n// Message Model\n// Represents a single message within a conversation\nmodel Message {\n  id             String       @id @default(cuid()) // Unique ID for the message\n  createdAt      DateTime     @default(now()) // Timestamp when the message was sent\n  sender         SenderType // Who sent the message (User, AI, System)\n  text           String       @db.Text // Content of the message\n  conversationId String // Foreign key linking to the Conversation\n  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade) // Relation field\n}\n\n// Enum for Sender Type\nenum SenderType {\n  USER\n  AI\n  SYSTEM\n}\n\n// --- Add User Model --- \nmodel User {\n  id           String   @id @default(cuid())\n  username     String   @unique\n  passwordHash String // Store the hashed password, not the plain text\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  // Optional: Add roles or other user-related fields\n}\n",
+  "inlineSchemaHash": "b75dc0bb4bfc31c180451a899255a729c9401385a6e9505e6d54770517d1eb3c",
   "copyEngine": true
 }
 
@@ -226,6 +234,14 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "src/generated/prisma/query_engine-windows.dll.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-linux-musl.so.node");
+path.join(process.cwd(), "src/generated/prisma/libquery_engine-linux-musl.so.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/prisma/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/generated/prisma/schema.prisma")
