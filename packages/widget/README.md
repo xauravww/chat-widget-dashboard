@@ -2,6 +2,12 @@
 
 This package contains the embeddable React chat widget.
 
+## Demo Script To Embed Widget
+Hosted on some CDN:
+```
+<script src="https://cdn.jsdelivr.net/gh/sauravtechno/main-d/assets/test/chat-widget.iife.js" defer></script>
+```
+
 ## Features
 
 - Connects to the dashboard's Socket.IO server.
