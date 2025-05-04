@@ -5,7 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 function addCorsHeaders(response: NextResponse) {
   response.headers.set('Access-Control-Allow-Origin', '*');
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  response.headers.set('Access-Control-Allow-Credentials', 'true');
+  response.headers.set('Access-Control-Max-Age', '86400');
   return response;
 }
 
@@ -22,7 +24,8 @@ export async function middleware(req: NextRequest) {
   if (
     pathname.startsWith('/api/auth') || 
     pathname.startsWith('/api/socket') ||
-    pathname.startsWith('/api/ai')
+    pathname.startsWith('/api/ai') ||
+    pathname.startsWith('/api/health')
   ) {
     const response = NextResponse.next();
     return addCorsHeaders(response);

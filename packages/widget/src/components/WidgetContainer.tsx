@@ -225,6 +225,13 @@ const WidgetContainer: React.FC = () => {
         const aiMessageData = { sender: senderAi, text: aiText, sessionId }; 
         
         console.log('Sending AI message to server:', aiMessageData);
+        
+        // Add AI message locally immediately
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { ...aiMessageData, id: Date.now().toString() + '-ai' } // Add unique ID
+        ]);
+
         socket.emit('chat message', aiMessageData); 
 
       } catch (error) {
