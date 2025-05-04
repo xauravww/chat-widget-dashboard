@@ -49,3 +49,4 @@ coverage/
 *.db
 *.db-journal 
 .vercel
+packages/widget/.env.production

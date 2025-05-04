@@ -30,8 +30,10 @@ const WidgetWrapper = styled.div`
 `;
 
 // Update the server URL and path
-const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001'; // Point to standalone socket server
-const AI_API_ENDPOINT = import.meta.env.VITE_AI_API_URL || 'http://localhost:3000/api/ai'; // Keep pointing to dashboard
+const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_URL || 'https://cdn.jsdelivr.net/gh/sauravtechno/main-d/assets/test/chat-widget.iife.js'; // Point to standalone socket server
+console.log(`Using socket env: ${JSON.stringify(import.meta.env)}`); // Log the server URL
+console.log(`Using socket url: ${SOCKET_SERVER_URL}`); // Log the server URL
+const AI_API_ENDPOINT = import.meta.env.VITE_AI_API_URL || 'https://chat-widget-dashboard-dashboard.vercel.app/api/ai'; // Keep pointing to dashboard
 
 // Function to get or create session ID
 const getSessionId = (): string => {
