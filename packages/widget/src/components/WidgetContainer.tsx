@@ -30,10 +30,10 @@ const WidgetWrapper = styled.div`
 `;
 
 // Update the server URL and path
-const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000';
-const SOCKET_PATH = "/api/socket";
+const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001'; // Point to standalone socket server
+const SOCKET_PATH = undefined; // Remove path if connecting directly to the root of the socket server
 
-const AI_API_ENDPOINT = import.meta.env.VITE_AI_API_URL || 'http://localhost:3000/api/ai';
+const AI_API_ENDPOINT = import.meta.env.VITE_AI_API_URL || 'http://localhost:3000/api/ai'; // Keep pointing to dashboard
 
 // Function to get or create session ID
 const getSessionId = (): string => {
@@ -78,10 +78,10 @@ const WidgetContainer: React.FC = () => {
 
   // Effect to initialize socket connection
   useEffect(() => {
-    console.log(`Connecting socket to ${SOCKET_SERVER_URL} path ${SOCKET_PATH} for session: ${sessionId}...`);
+    console.log(`Connecting socket to ${SOCKET_SERVER_URL} ...`); // Remove path from log
     setConnectionStatus('connecting');
     const newSocket: Socket<DefaultEventsMap, DefaultEventsMap> = io(SOCKET_SERVER_URL, { 
-      path: SOCKET_PATH, // Specify the path
+      // Remove path: SOCKET_PATH, 
       query: { sessionId } // Send session ID during connection
     });
     setSocket(newSocket);

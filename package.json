@@ -10,10 +10,14 @@
     "dashboard:build": "npm run build --workspace=@repo/dashboard",
     "dashboard:start": "npm run start --workspace=@repo/dashboard",
     "dashboard:migrate:dev": "npx prisma migrate dev --schema=./apps/dashboard/prisma/schema.prisma --name init",
-    "dashboard:generate": "npx prisma generate --schema=./apps/dashboard/prisma/schema.prisma"
+    "dashboard:generate": "npx prisma generate --schema=./apps/dashboard/prisma/schema.prisma",
+    "socket-server:dev": "npm run dev --workspace=socket-server",
+    "socket-server:start": "npm run start --workspace=socket-server",
+    "socket-server:generate": "npm run generate --workspace=socket-server"
   },
   "workspaces": [
     "apps/*",
+    "apps/socket-server",
     "packages/*"
   ],
   "keywords": [

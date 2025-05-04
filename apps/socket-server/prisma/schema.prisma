@@ -6,8 +6,10 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma" // Remove custom output path
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  // Output location relative to this schema file
+  // output   = "../src/generated/prisma" // Default location is node_modules/.prisma/client
+  // Define binary targets needed for deployment environment + local dev
+  binaryTargets = ["native", "debian-openssl-3.0.x"] 
 }
 
 datasource db {
@@ -55,4 +57,4 @@ model User {
   updatedAt     DateTime  @updatedAt
   
   // Optional: Add roles or other user-related fields
-}
+} 
