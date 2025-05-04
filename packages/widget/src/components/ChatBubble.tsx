@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Bot } from 'lucide-react';
+import { BotIcon } from 'lucide-react';
 
-// Basic bubble styling - can be customized further
 const Bubble = styled.button`
-  background-color: #007bff; // Example color
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 50%;
@@ -21,7 +20,6 @@ const Bubble = styled.button`
     transform: scale(1.1);
   }
 
-  /* Style the icon */
   svg {
     width: 40px;
     height: 40px;
@@ -32,12 +30,15 @@ interface ChatBubbleProps {
   onClick: () => void;
 }
 
+// Explicit cast to avoid TS2786 error
+const Icon = BotIcon as React.FC<React.SVGProps<SVGSVGElement>>;
+
 const ChatBubble: React.FC<ChatBubbleProps> = ({ onClick }) => {
   return (
     <Bubble onClick={onClick} aria-label="Open chat widget">
-      <Bot size={40} />
+      <Icon />
     </Bubble>
   );
 };
 
-export default ChatBubble; 
+export default ChatBubble;

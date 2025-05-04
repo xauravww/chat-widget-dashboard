@@ -31,8 +31,6 @@ const WidgetWrapper = styled.div`
 
 // Update the server URL and path
 const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001'; // Point to standalone socket server
-const SOCKET_PATH = undefined; // Remove path if connecting directly to the root of the socket server
-
 const AI_API_ENDPOINT = import.meta.env.VITE_AI_API_URL || 'http://localhost:3000/api/ai'; // Keep pointing to dashboard
 
 // Function to get or create session ID
@@ -81,7 +79,6 @@ const WidgetContainer: React.FC = () => {
     console.log(`Connecting socket to ${SOCKET_SERVER_URL} ...`); // Remove path from log
     setConnectionStatus('connecting');
     const newSocket: Socket<DefaultEventsMap, DefaultEventsMap> = io(SOCKET_SERVER_URL, { 
-      // Remove path: SOCKET_PATH, 
       query: { sessionId } // Send session ID during connection
     });
     setSocket(newSocket);
@@ -89,8 +86,6 @@ const WidgetContainer: React.FC = () => {
     newSocket.on('connect', () => {
       console.log('Socket connected:', newSocket.id);
       setConnectionStatus('connected');
-      // Optional: Send identification or join a room if needed
-      // newSocket.emit('join', { userId: 'unique-user-id' }); 
     });
 
     newSocket.on('disconnect', (reason: Socket.DisconnectReason) => {
@@ -101,17 +96,12 @@ const WidgetContainer: React.FC = () => {
     newSocket.on('connect_error', (error: Error) => {
       console.error('Socket connection error:', error);
       setConnectionStatus('disconnected');
-      // Handle connection errors (e.g., show error message to user)
     });
 
     // Handle incoming messages (now potentially filtered by server using session ID)
     newSocket.on('chat message', (message: Omit<Message, 'id'>) => {
       console.log('Received message via broadcast:', message);
-      // Only add message from broadcast if it's NOT from the current user
-      // User messages are added locally immediately for better UX.
       if (message.sender !== 'user') {
-        // Check if message *already* exists (e.g., due to potential race conditions or reconnects)
-        // This check might be overly cautious depending on server logic, but safer.
         const messageExists = messages.some(m => m.text === message.text && m.sender === message.sender);
         if (!messageExists) {
           setMessages((prevMessages) => [
@@ -125,9 +115,6 @@ const WidgetContainer: React.FC = () => {
     // Handle potential initial messages sent by server for this session
     newSocket.on('load history', (history: Message[]) => {
        console.log('Received message history:', history);
-       // Replace current messages with history if needed (or merge)
-       // This requires server-side logic to fetch history based on sessionId
-       // setMessages(history);
     });
 
     // Cleanup on component unmount
@@ -135,7 +122,7 @@ const WidgetContainer: React.FC = () => {
       console.log('Disconnecting socket...');
       newSocket.disconnect();
     };
-  }, [sessionId]); // Add sessionId as dependency
+  }, [sessionId]);
 
   const toggleWidget = () => {
     setIsOpen(!isOpen);
@@ -161,7 +148,6 @@ const WidgetContainer: React.FC = () => {
       const response = await fetch(AI_API_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Send prompt, history, and askForName flag
         body: JSON.stringify({ prompt: userMessage, history, askForName }), 
       });
 
@@ -180,14 +166,12 @@ const WidgetContainer: React.FC = () => {
 
     } catch (error) {
        console.error("Error calling AI API:", error);
-       // Re-throw or return a specific error message
        throw new Error("Failed to get response from AI assistant.");
     } finally {
         setIsAiResponding(false);
     }
   };
 
-  // Update sendMessage
   const sendMessage = useCallback(async (text: string) => {
     if (socket && text.trim() && connectionStatus === 'connected' && !isAiResponding) {
       const senderUser: 'user' = 'user'; 
@@ -200,7 +184,6 @@ const WidgetContainer: React.FC = () => {
       if (!storedUsername) {
         console.log("Username not found, setting flag and storing current message as username.");
         askForNameFlag = true;
-        // Store this message text as the username (simplification)
         localStorage.setItem(WIDGET_USERNAME_KEY, text);
       }
       
@@ -237,18 +220,15 @@ const WidgetContainer: React.FC = () => {
       } catch (error) {
         const errorText = error instanceof Error ? error.message : "Failed to reach AI.";
         console.error("Error getting or sending AI response:", errorText);
-        // Add error message locally
         const senderSystem: 'system' = 'system'; 
         const errorMessageData = { sender: senderSystem, text: errorText, sessionId }; 
         setMessages((prevMessages) => [
             ...prevMessages,
             { ...errorMessageData, id: Date.now().toString() + '-err' } 
         ]);
-        // Optionally send system/error messages to server too? Decide based on requirements.
-        // socket.emit('chat message', errorMessageData);
       }
     }
-  }, [socket, connectionStatus, isAiResponding, sessionId, getAiResponse]); // Added getAiResponse to dependency array
+  }, [socket, connectionStatus, isAiResponding, sessionId, getAiResponse]);
 
   return (
     <WidgetWrapper>
