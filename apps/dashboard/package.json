@@ -29,7 +29,9 @@
     "socket.io": "^4.8.1",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4",
-    "typescript": "^5",
+    "typescript": "^5"
+  },
+  "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@prisma/client": "^6.7.0",
     "@types/bcryptjs": "^2.4.6",
